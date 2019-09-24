@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.stockpile.canonicals.LoginCanonical;
+import com.stockpile.canonicals.UserCanonical;
 import com.stockpile.domains.Login;
 import com.stockpile.transformations.UserTransformation;
 
 @Service
 public class LoginBeanUtil {
 
-	/**UserTransformation, used as a utility regarding the user's transformation.*/
-    @Autowired
-    private UserTransformation userTransformation;
 	
 	/**
 	 * The toLoginCanonical(Login) method will transform a Login into a LoginCanonical.
@@ -26,7 +24,7 @@ public class LoginBeanUtil {
 				.id(login.getId())
 				.userName(login.getUserName())
 				.password(login.getPassword())
-				.user(userTransformation.convert(login.getUser()))
+				.user(UserCanonical.builder().id(login.getUser()).build())
 				.activated(login.isActivated())
 				.creationDate(login.getCreationDate())
 				.lastUpdate(login.getLastUpdate())
@@ -45,7 +43,7 @@ public class LoginBeanUtil {
 				.id(login.getId())
 				.userName(login.getUserName())
 				.password(login.getPassword())
-				.user(userTransformation.convert(login.getUser()))
+				.user(login.getUser().getId())
 				.activated(login.isActivated())
 				.creationDate(login.getCreationDate())
 				.lastUpdate(login.getLastUpdate())

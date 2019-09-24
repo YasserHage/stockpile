@@ -4,20 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.stockpile.canonicals.BillCanonical;
+import com.stockpile.canonicals.CompanyCanonical;
+import com.stockpile.canonicals.UserCanonical;
 import com.stockpile.domains.Bill;
 import com.stockpile.transformations.CompanyTransformation;
 import com.stockpile.transformations.UserTransformation;
 
 @Service
 public class BillBeanUtil {
-
-	/**UserTransformation, used as a utility regarding the user's transformation.*/
-    @Autowired
-    private UserTransformation userTransformation;
-    
-    /**CompanyTransformation, used as a utility regarding the company's transformation.*/
-    @Autowired
-    private CompanyTransformation companyTransformation;
 	
 	/**
 	 * The toBillCanonical(Bill) method will transform a Bill into a BillCanonical.
@@ -29,8 +23,8 @@ public class BillBeanUtil {
 		return BillCanonical
 				.builder()
 				.id(bill.getId())
-				.user(userTransformation.convert(bill.getUser()))
-				.company(companyTransformation.convert(bill.getCompany()))
+				.user(UserCanonical.builder().id(bill.getUser()).build())
+				.company(CompanyCanonical.builder().id(bill.getCompany()).build())
 				.payingMethod(bill.getPayingMethod())
 				.activated(bill.isActivated())
 				.creationDate(bill.getCreationDate())
@@ -48,8 +42,8 @@ public class BillBeanUtil {
 		return Bill
 				.builder()
 				.id(bill.getId())
-				.user(userTransformation.convert(bill.getUser()))
-				.company(companyTransformation.convert(bill.getCompany()))
+				.user(bill.getUser().getId())
+				.company(bill.getCompany().getId())
 				.payingMethod(bill.getPayingMethod())
 				.activated(bill.isActivated())
 				.creationDate(bill.getCreationDate())

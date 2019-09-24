@@ -3,6 +3,7 @@ package com.stockpile.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.stockpile.canonicals.CompanyCanonical;
 import com.stockpile.canonicals.ProductCanonical;
 import com.stockpile.domains.Product;
 import com.stockpile.services.CompanyService;
@@ -11,9 +12,6 @@ import com.stockpile.transformations.CompanyTransformation;
 @Service
 public class ProductBeanUtil {
 
-	/**CompanyTransformation, used as a utility regarding the company's transformation.*/
-    @Autowired
-    private CompanyTransformation companyTransformation;
 	
 	/**
 	 * The toProductCanonical(Product) method will transform a Product into a ProductCanonical.
@@ -29,7 +27,7 @@ public class ProductBeanUtil {
 				.description(product.getDescription())
 				.quantity(product.getQuantity())
 				.price(product.getPrice())
-				.company(companyTransformation.convert(product.getCompany()))
+				.company(CompanyCanonical.builder().id(product.getCompany()).build())
 				.imageUrl(product.getImageUrl())
 				.activated(product.isActivated())
 				.creationDate(product.getCreationDate())
@@ -51,7 +49,7 @@ public class ProductBeanUtil {
 				.description(product.getDescription())
 				.quantity(product.getQuantity())
 				.price(product.getPrice())
-				.company(companyTransformation.convert(product.getCompany()))
+				.company(product.getCompany().getId())
 				.imageUrl(product.getImageUrl())
 				.activated(product.isActivated())
 				.creationDate(product.getCreationDate())

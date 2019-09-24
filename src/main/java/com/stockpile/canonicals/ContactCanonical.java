@@ -27,7 +27,7 @@ public class ContactCanonical extends Canonical {
     //The company using this contact.
     private CompanyCanonical company = null;
     
-    //Telephone or Email.
+    //Phone or Email.
     private String type = null;
     
     //Phone number or email address.

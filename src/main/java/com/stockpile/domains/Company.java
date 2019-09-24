@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
@@ -23,7 +24,7 @@ public class Company implements Serializable{
 
 	/** The company's primary key. */     
     @Id   
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id = null;
     
     /** The company's name. */

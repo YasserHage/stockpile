@@ -3,21 +3,15 @@ package com.stockpile.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.stockpile.canonicals.CustomerCanonical;
 import com.stockpile.canonicals.SaleCanonical;
+import com.stockpile.canonicals.UserCanonical;
 import com.stockpile.domains.Sale;
 import com.stockpile.transformations.CustomerTransformation;
 import com.stockpile.transformations.UserTransformation;
 
 @Service
 public class SaleBeanUtil {
-
-	/**UserTransformation, used as a utility regarding the user's transformation.*/
-    @Autowired
-    private UserTransformation userTransformation;
-    
-    /**CustomerTransformation, used as a utility regarding the customer's transformation.*/
-    @Autowired
-    private CustomerTransformation customerTransformation;
 	
 	/**
 	 * The toSaleCanonical(Sale) method will transform a Sale into a SaleCanonical.
@@ -29,8 +23,8 @@ public class SaleBeanUtil {
 		return SaleCanonical
 				.builder()
 				.id(sale.getId())
-				.user(userTransformation.convert(sale.getUser()))
-				.customer(customerTransformation.convert(sale.getCustomer()))
+				.user(UserCanonical.builder().id(sale.getUser()).build())
+				.customer(CustomerCanonical.builder().id(sale.getCustomer()).build())
 				.payingMethod(sale.getPayingMethod())
 				.activated(sale.isActivated())
 				.creationDate(sale.getCreationDate())
@@ -48,8 +42,8 @@ public class SaleBeanUtil {
 		return Sale
 				.builder()
 				.id(sale.getId())
-				.user(userTransformation.convert(sale.getUser()))
-				.customer(customerTransformation.convert(sale.getCustomer()))
+				.user(sale.getUser().getId())
+				.customer(sale.getCustomer().getId())
 				.payingMethod(sale.getPayingMethod())
 				.activated(sale.isActivated())
 				.creationDate(sale.getCreationDate())

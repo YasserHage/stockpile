@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class Login implements Serializable {
 
 	/** The login's primary key. */     
     @Id   
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id = null;
     
     /**The userName used to sign in.*/
@@ -32,7 +33,7 @@ public class Login implements Serializable {
     private String password = null;
     
     /**The user assigned to this login.*/
-    private User user = null;
+    private Integer user = null;
     
     /** Checks if the login is activated, for logic deletion purposes. */
     private boolean activated = true;

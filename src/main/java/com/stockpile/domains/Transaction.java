@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -23,17 +24,17 @@ public class Transaction implements Serializable {
 
 	/** The transaction's primary key. */     
     @Id   
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id = null;
     
     /**The sale that this transaction is attached to, if there's.*/
-    private Sale sale = null;
+    private Integer sale = null;
     
     /**The bill that this transaction is attached to, if there's.*/
-    private Bill bill = null;
+    private Integer bill = null;
     
     /**The product regarding this transaction.*/
-    private Product product = null;
+    private Integer product = null;
     
     /**Sale or Bill.*/
     private String transactionType = null;

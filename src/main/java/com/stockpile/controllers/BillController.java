@@ -30,7 +30,7 @@ import com.stockpile.services.BillService;
 import com.stockpile.transformations.BillTransformation;
 
 @RestController
-@RequestMapping("/Bills")
+@RequestMapping("/bills")
 public class BillController {
 
 	/**Logger from BillController.*/

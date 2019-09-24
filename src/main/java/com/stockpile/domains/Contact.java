@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.stockpile.canonicals.CompanyCanonical;
@@ -26,7 +27,7 @@ public class Contact implements Serializable{
 
 	/** The contact's primary key. */     
     @Id   
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id = null;
     
     /**The contact's name.*/
@@ -36,9 +37,9 @@ public class Contact implements Serializable{
     private String description = null;
   
     /**The company using this contact.*/
-    private Company company = null;
+    private Integer company = null;
     
-    /**Telephone or Email.*/
+    /*Phone or Email.*/
     private String type = null;
     
     /**Phone number or email address.*/

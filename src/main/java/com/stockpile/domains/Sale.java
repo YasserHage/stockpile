@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -21,14 +22,14 @@ public class Sale implements Serializable{
 
 	/** The sale's primary key. */     
     @Id   
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id = null;
     
     /**The userName used to sign in.*/
-    private User user = null;
+    private Integer user = null;
     
     /**The password used to sign in.*/
-    private Customer customer = null;
+    private Integer customer = null;
     
     /**Cash, credit or debit.*/
     private String payingMethod = null;

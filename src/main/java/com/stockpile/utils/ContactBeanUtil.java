@@ -3,16 +3,13 @@ package com.stockpile.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.stockpile.canonicals.CompanyCanonical;
 import com.stockpile.canonicals.ContactCanonical;
 import com.stockpile.domains.Contact;
 import com.stockpile.transformations.CompanyTransformation;
 
 @Service
 public class ContactBeanUtil {
-	
-	/**CompanyTransformation, used as a utility regarding the company's transformation.*/
-    @Autowired
-    private CompanyTransformation companyTransformation;
 	
 	/**
 	 * The toContactCanonical(Contact) method will transform a Contact into a ContactCanonical.
@@ -26,7 +23,7 @@ public class ContactBeanUtil {
 				.id(contact.getId())
 				.name(contact.getName())
 				.description(contact.getDescription())
-				.company(companyTransformation.convert(contact.getCompany()))
+				.company(CompanyCanonical.builder().id(contact.getCompany()).build())
 				.type(contact.getType())
 				.value(contact.getValue())
 				.activated(contact.isActivated())
@@ -47,7 +44,7 @@ public class ContactBeanUtil {
 				.id(contact.getId())
 				.name(contact.getName())
 				.description(contact.getDescription())
-				.company(companyTransformation.convert(contact.getCompany()))
+				.company(contact.getCompany().getId())
 				.type(contact.getType())
 				.value(contact.getValue())
 				.activated(contact.isActivated())

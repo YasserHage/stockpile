@@ -3,26 +3,24 @@ package com.stockpile.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.stockpile.canonicals.SaleCanonical;
+import com.stockpile.canonicals.BillCanonical;
+import com.stockpile.canonicals.ProductCanonical;
 import com.stockpile.canonicals.TransactionCanonical;
 import com.stockpile.domains.Transaction;
-import com.stockpile.transformations.BillTransformation;
-import com.stockpile.transformations.ProductTransformation;
-import com.stockpile.transformations.SaleTransformation;
 
 @Service
 public class TransactionBeanUtil {
-
-	/**SaleTransformation, used as a utility regarding the sale's transformation.*/
-    @Autowired
-    private SaleTransformation saleTransformation;
-    
-    /**BillTransformation, used as a utility regarding the bill's transformation.*/
-    @Autowired
-    private BillTransformation billTransformation;
-    
-    /**ProductTransformation, used as a utility regarding the product's transformation.*/
-    @Autowired
-    private ProductTransformation productTransformation;
+	
+	/**
+	 * SaleCanonical is a bean class regarding the Sale data output.
+	 */
+	SaleCanonical saleCanonical;
+	
+	/**
+	 * BillCanonical is a bean class regarding the Bill data output.
+	 */
+	BillCanonical billCanonical;
 	
 	/**
 	 * The toTransactionCanonical(Transaction) method will transform a Transaction into a TransactionCanonical.
@@ -31,12 +29,28 @@ public class TransactionBeanUtil {
 	 * @return TransactionCanonical - The transformed TransactionCanonical.
 	 */
 	public TransactionCanonical toTransactionCanonical(Transaction transaction) {
+		if(transaction.getSale() != null) {
+			this.saleCanonical = SaleCanonical
+							.builder()
+							.id(transaction.getSale())
+							.build();
+		}else {
+			this.saleCanonical = null;
+		}
+		if(transaction.getBill() != null) {
+			this.billCanonical = BillCanonical
+							.builder()
+							.id(transaction.getBill())
+							.build();
+		}else {
+			this.billCanonical = null;
+		}
 		return TransactionCanonical
 				.builder()
 				.id(transaction.getId())
-				.sale(saleTransformation.convert(transaction.getSale()))
-				.bill(billTransformation.convert(transaction.getBill()))
-				.product(productTransformation.convert(transaction.getProduct()))
+				.sale(this.saleCanonical)
+				.bill(this.billCanonical)
+				.product(ProductCanonical.builder().id(transaction.getProduct()).build())
 				.transactionType(transaction.getTransactionType())
 				.quantity(transaction.getQuantity())
 				.price(transaction.getPrice())
@@ -53,12 +67,20 @@ public class TransactionBeanUtil {
 	 * @return Transaction			- The transformed Transaction.
 	 */
 	public Transaction toTransaction(TransactionCanonical transaction) {
+		Integer bill = null;
+		Integer sale = null;
+		if(transaction.getBill() !=null) {
+			bill = transaction.getBill().getId();
+		}
+		if(transaction.getSale() !=null) {
+			sale = transaction.getSale().getId();
+		}
 		return Transaction
 				.builder()
 				.id(transaction.getId())
-				.sale(saleTransformation.convert(transaction.getSale()))
-				.bill(billTransformation.convert(transaction.getBill()))
-				.product(productTransformation.convert(transaction.getProduct()))
+				.sale(sale)
+				.bill(bill)
+				.product(transaction.getProduct().getId())
 				.transactionType(transaction.getTransactionType())
 				.quantity(transaction.getQuantity())
 				.price(transaction.getPrice())

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class Product implements Serializable {
 
 	/** The product's primary key. */     
     @Id   
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id = null;
     
     /** The product's name. */
@@ -39,7 +40,7 @@ public class Product implements Serializable {
     private Double price = null;
     
     /**The product's company.*/
-    private Company company = null;
+    private Integer company = null;
     
     /**The url for the product's image.*/
     private String imageUrl = null;

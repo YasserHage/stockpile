@@ -25,17 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stockpile.canonicals.TransactionCanonical;
 import com.stockpile.canonicals.TransactionCanonicalAsList;
+import com.stockpile.domains.Product;
 import com.stockpile.domains.Transaction;
 import com.stockpile.services.TransactionService;
 import com.stockpile.transformations.TransactionTransformation;
 
 @RestController
-@RequestMapping("/Transactions")
+@RequestMapping("/transactions")
 public class TransactionController {
 
 	/**Logger from TransactionController.*/
 	private Logger logger = LogManager.getLogger(TransactionController.class);
-	
+    
 	 /**
      * TransactionService, class meant to run all verbs like CRUD.
      */
@@ -108,12 +109,13 @@ public class TransactionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionCanonical post(@RequestBody TransactionCanonical TransactionCanonical) {
-    	
-    	Transaction Transaction = TransactionTransformation.convert(TransactionCanonical);
-    	logger.info("Adding a new Transaction {} to the database", Transaction);
+    	Transaction transaction = TransactionTransformation.convert(TransactionCanonical);
+    	//Fetching product from database
+    	//    	Optional<Product> fetchedProduct = this.productService.findById(productId);
+    	logger.info("Adding a new Transaction {} to the database", transaction);
         
         // Saving the Transaction!
-        return TransactionTransformation.convert(this.TransactionService.save(Transaction));	
+        return TransactionTransformation.convert(this.TransactionService.save(transaction));	
     }
     
     //Updating an existing Transaction by it's id.

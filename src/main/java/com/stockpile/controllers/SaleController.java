@@ -30,7 +30,7 @@ import com.stockpile.services.SaleService;
 import com.stockpile.transformations.SaleTransformation;
 
 @RestController
-@RequestMapping("/Sales")
+@RequestMapping("/sales")
 public class SaleController {
 
 	/**Logger from SaleController.*/
