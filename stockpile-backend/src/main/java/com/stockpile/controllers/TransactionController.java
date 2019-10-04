@@ -41,27 +41,27 @@ public class TransactionController {
      * TransactionService, class meant to run all verbs like CRUD.
      */
     @Autowired
-    private TransactionService TransactionService;
+    private TransactionService transactionService;
     
     /**
      * TransactionTransformation, used as a utility regarding the Transaction's transformation.
      */
     @Autowired
-    private TransactionTransformation TransactionTransformation;
+    private TransactionTransformation transactionTransformation;
     
     //Views a list of available Transactions.
     @GetMapping
     public TransactionCanonicalAsList get() {
         logger.info("Fetching Transactions from database...");
-        List<TransactionCanonical> Transactions =
-                TransactionTransformation
-                        .convert(this.TransactionService
+        List<TransactionCanonical> transactions =
+                transactionTransformation
+                        .convert(this.transactionService
                         .findAll()
                         .stream()
                         .filter(Transaction::isActivated)
                         .collect(Collectors.toList()));
-        logger.info("Fetched {} Transactions.", Transactions.size());
-        return new TransactionCanonicalAsList(Transactions);
+        logger.info("Fetched {} Transactions.", transactions.size());
+        return new TransactionCanonicalAsList(transactions);
     }
     
     //Views a list of available Transactions on the given page.
@@ -75,80 +75,80 @@ public class TransactionController {
         final String COLUMN     = "creationDate";
         PageRequest pageRequest =  PageRequest.of(PAGE_NUMBER, PAGE_SIZE, Sort.Direction.DESC, COLUMN);
         // Including pageRequest as Pageable
-        Page<Transaction> Transaction = this.TransactionService.findAll(pageRequest);
-        logger.info("Fetched {} Transactions.", TransactionTransformation.convert(Transaction.getContent()));
+        Page<Transaction> transaction = this.transactionService.findAll(pageRequest);
+        logger.info("Fetched {} Transactions.", transactionTransformation.convert(transaction.getContent()));
         TransactionCanonicalAsList list =
-                new TransactionCanonicalAsList(TransactionTransformation.convert(Transaction.getContent()));
-        list.setPageNumber(Transaction.getTotalPages());
-        list.setElementNumber(Transaction.getTotalElements());
+                new TransactionCanonicalAsList(transactionTransformation.convert(transaction.getContent()));
+        list.setPageNumber(transaction.getTotalPages());
+        list.setElementNumber(transaction.getTotalElements());
         return list;
     }
     
     //Retriave a Transaction by it's id.
-    @GetMapping("/{TransactionId}")
-    public ResponseEntity get(@PathVariable Integer TransactionId) {
-    	logger.info("Fetching Transaction {} from database...", TransactionId);
+    @GetMapping("/{transactionId}")
+    public ResponseEntity get(@PathVariable Integer transactionId) {
+    	logger.info("Fetching Transaction {} from database...", transactionId);
     	
     	//Fetching Transaction from database
-    	Optional<Transaction> fetchedTransaction = this.TransactionService.findById(TransactionId);
+    	Optional<Transaction> fetchedTransaction = this.transactionService.findById(transactionId);
     	
     	if(!fetchedTransaction.isPresent()) {
     		// If there isn't any Transaction fetched from database, 404!
-            logger.info("There isn't any Transaction with id {} on database.", TransactionId);
+            logger.info("There isn't any Transaction with id {} on database.", transactionId);
             return new ResponseEntity(HttpStatus.NOT_FOUND);
     	}
     	
     	// If there is a fetched Transaction from database
-    	TransactionCanonical TransactionCanonical = TransactionTransformation.convert(fetchedTransaction.get());
-        logger.info("Fetched {}.", TransactionCanonical);
-        return new ResponseEntity(TransactionCanonical, HttpStatus.OK);
+    	TransactionCanonical transactionCanonical = transactionTransformation.convert(fetchedTransaction.get());
+        logger.info("Fetched {}.", transactionCanonical);
+        return new ResponseEntity(transactionCanonical, HttpStatus.OK);
     	
     }
     
     //Create a new Transaction.
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionCanonical post(@RequestBody TransactionCanonical TransactionCanonical) {
-    	Transaction transaction = TransactionTransformation.convert(TransactionCanonical);
+    public TransactionCanonical post(@RequestBody TransactionCanonical transactionCanonical) {
+    	Transaction transaction = transactionTransformation.convert(transactionCanonical);
     	//Fetching product from database
     	//    	Optional<Product> fetchedProduct = this.productService.findById(productId);
     	logger.info("Adding a new Transaction {} to the database", transaction);
         
         // Saving the Transaction!
-        return TransactionTransformation.convert(this.TransactionService.save(transaction));	
+        return transactionTransformation.convert(this.transactionService.save(transaction));	
     }
     
     //Updating an existing Transaction by it's id.
-    @PutMapping("/{TransactionId}")
-    public TransactionCanonical put(@RequestBody TransactionCanonical TransactionCanonical, @PathVariable Integer TransactionId) {
+    @PutMapping("/{transactionId}")
+    public TransactionCanonical put(@RequestBody TransactionCanonical transactionCanonical, @PathVariable Integer transactionId) {
     	 
-    	Transaction Transaction = TransactionTransformation.convert(TransactionCanonical);
-    	logger.info("Updating the Transaction {} on database...", Transaction);
+    	Transaction transaction = transactionTransformation.convert(transactionCanonical);
+    	logger.info("Updating the Transaction {} on database...", transaction);
          // Fetching Transaction from database layer...
-         Optional<Transaction> fetchedTransaction = this.TransactionService.findById(TransactionId);
+         Optional<Transaction> fetchedTransaction = this.transactionService.findById(transactionId);
          
       // Checking if there is a Transaction with the id passed by parameter!
          if(fetchedTransaction.isPresent()) {
              // Updating the fetched Transaction's values...
-        	 fetchedTransaction.get().setSale(Transaction.getSale());
-        	 fetchedTransaction.get().setBill(Transaction.getBill());
-        	 fetchedTransaction.get().setProduct(Transaction.getProduct());
-        	 fetchedTransaction.get().setTransactionType(Transaction.getTransactionType());
-        	 fetchedTransaction.get().setQuantity(Transaction.getQuantity());
-        	 fetchedTransaction.get().setPrice(Transaction.getPrice());
+        	 fetchedTransaction.get().setSale(transaction.getSale());
+        	 fetchedTransaction.get().setBill(transaction.getBill());
+        	 fetchedTransaction.get().setProduct(transaction.getProduct());
+        	 fetchedTransaction.get().setTransactionType(transaction.getTransactionType());
+        	 fetchedTransaction.get().setQuantity(transaction.getQuantity());
+        	 fetchedTransaction.get().setPrice(transaction.getPrice());
              
              // Updating the Transaction!
-        	 return TransactionTransformation.convert(TransactionService.save(fetchedTransaction.get()));    	
+        	 return transactionTransformation.convert(transactionService.save(fetchedTransaction.get()));    	
          } else {
         	 return new TransactionCanonical();
          }
     }
     
     //Deletes a Transaction by it's id.
-    @DeleteMapping("/{TransactionId}")
-    public TransactionCanonical delete(@PathVariable Integer TransactionId) {
-        logger.info("Deleting the Transaction with id {} from the database...", TransactionId);
-        return TransactionTransformation.convert(TransactionService.deleteById(TransactionId));
+    @DeleteMapping("/{transactionId}")
+    public TransactionCanonical delete(@PathVariable Integer transactionId) {
+        logger.info("Deleting the Transaction with id {} from the database...", transactionId);
+        return transactionTransformation.convert(transactionService.deleteById(transactionId));
     }
     
 }
